@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ELAPSED_LIMIT=500000000
+ELAPSED_LIMIT=500000000  # 0.5 seconds
 
 # Runs before each command is executed.
 function PreCommand() {
@@ -41,9 +41,9 @@ function PrintElapsedTime() {
 
     ELAPSED=$(expr $(TimeNow) - $TIME_START)
     if [ "$ELAPSED" -ge "$ELAPSED_LIMIT" ] || [ "$1" -ne "0" ]; then
-        t=$(MiliFromNano $ELAPSED)
+        t=$(PrintTime $ELAPSED)
         if [ -n "$TIME_PARTIAL" ]; then
-            t="($(MiliFromNano $(expr $(TimeNow) - $TIME_PARTIAL))), Total: $t"
+            t="($(PrintTime $(expr $(TimeNow) - $TIME_PARTIAL))), Total: $t"
         fi
         echo -e "\033[03;${c}m"$(PadMiddle "$x" "$t")"\033[00m"
     fi
@@ -53,8 +53,29 @@ function TimeNow() {
     date +%s%N
 }
 
-function MiliFromNano() {
-    printf "%'d.%03d ms" $(($1/1000000)) $(($1/1000%1000))
+function PrintTime() {
+    t=$1
+    B=1000000000
+
+    d=$((t/B/60/60/24))
+    h=$((t/B/60/60%24))
+    m=$((t/B/60%60))
+    s=$((t/B%60))
+    u=$((t/1000000%1000))
+
+    if [ $d -gt 0 ]; then
+        printf "%dd " $d
+    fi
+    if [ $h -gt 0 ]; then
+        printf "%dh " $h
+    fi
+    if [ $m -gt 0 ]; then
+        printf "%dm " $m
+    fi
+    if [ $s -gt 0 ] || [ $u -gt 0 ]; then
+        printf "%'d.%03ds" $s $u
+    fi
+    printf '\n'
 }
 
 function PadMiddle() {
