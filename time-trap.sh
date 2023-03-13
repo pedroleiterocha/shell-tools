@@ -42,9 +42,9 @@ function PrintElapsedTime() {
     ELAPSED=$(expr $(TimeNow) - $TIME_START)
     if [ "$ELAPSED" -ge "$ELAPSED_LIMIT" ] || [ "$1" -ne "0" ]; then
         t=$(MiliFromNano $ELAPSED)
-        # if [ -n "$TIME_PARTIAL" ]; then
-        #     t="($(MiliFromNano $(expr $(TimeNow) - $TIME_PARTIAL))), Total: $t"
-        # fi
+        if [ -n "$TIME_PARTIAL" ]; then
+            t="($(MiliFromNano $(expr $(TimeNow) - $TIME_PARTIAL))), Total: $t"
+        fi
         echo -e "\033[03;${c}m"$(PadMiddle "$x" "$t")"\033[00m"
     fi
 }
