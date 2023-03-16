@@ -45,7 +45,7 @@ function PrintElapsedTime() {
         if [ -n "$TIME_PARTIAL" ]; then
             t="($(PrintTime $(expr $(TimeNow) - $TIME_PARTIAL))), Total: $t"
         fi
-        echo -e "\033[03;${c}m"$(PadMiddle "$x" "$t")"\033[00m"
+        echo -e "\033[03;02;${c}m"$(PadMiddle "$x" "$t")"\033[00m"
     fi
 }
 
