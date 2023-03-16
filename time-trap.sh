@@ -4,7 +4,7 @@ ELAPSED_LIMIT=2000000000  # 2 seconds
 
 # Runs before each command is executed.
 function PreCommand() {
-    s=$?
+    local s=$?
     if [ -z "$AT_PROMPT" ] && [ -n "$TIME_START" ]; then
         PrintElapsedTime $s
         TIME_PARTIAL=$(TimeNow)
@@ -32,14 +32,14 @@ function PostCommand() {
 # ELAPSED_LIMIT or if the last command did not exit with zero.
 function PrintElapsedTime() {
     if [ "$1" -eq "0" ]; then
-        x="[V]"
-        c=32
+        local x="[V]"
+        local c=32
     else
-        x="[X $1]"
-        c=31
+        local x="[X $1]"
+        local c=31
     fi
 
-    ELAPSED=$(expr $(TimeNow) - $TIME_START)
+    local ELAPSED=$(expr $(TimeNow) - $TIME_START)
     if [ "$ELAPSED" -ge "$ELAPSED_LIMIT" ] || [ "$1" -ne "0" ]; then
         t=$(PrintTime $ELAPSED)
         if [ -n "$TIME_PARTIAL" ]; then
@@ -54,14 +54,14 @@ function TimeNow() {
 }
 
 function PrintTime() {
-    t=$1
-    B=1000000000
+    local t=$1
+    local B=1000000000
 
-    d=$((t/B/60/60/24))
-    h=$((t/B/60/60%24))
-    m=$((t/B/60%60))
-    s=$((t/B%60))
-    u=$((t/1000000%1000))
+    local d=$((t/B/60/60/24))
+    local h=$((t/B/60/60%24))
+    local m=$((t/B/60%60))
+    local s=$((t/B%60))
+    local u=$((t/1000000%1000))
 
     if [ $d -gt 0 ]; then
         printf "%dd " $d
@@ -79,8 +79,8 @@ function PrintTime() {
 }
 
 function PadMiddle() {
-    s=$(($COLUMNS - ${#1} - ${#2} - 2))
-    b=$(printf '=%.0s' `seq 1 $s`)
+    local s=$(($COLUMNS - ${#1} - ${#2} - 2))
+    local b=$(printf '=%.0s' `seq 1 $s`)
     echo $1 $b $2
 }
 
