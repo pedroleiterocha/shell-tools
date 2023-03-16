@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ELAPSED_LIMIT=500000000  # 0.5 seconds
+ELAPSED_LIMIT=2000000000  # 2 seconds
 
 # Runs before each command is executed.
 function PreCommand() {
