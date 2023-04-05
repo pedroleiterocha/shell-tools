@@ -32,10 +32,8 @@ function PostCommand() {
 # ELAPSED_LIMIT or if the last command did not exit with zero.
 function PrintElapsedTime() {
     if [ "$1" -eq "0" ]; then
-        local x="[V]"
         local c=32
     else
-        local x="[X $1]"
         local c=31
     fi
 
@@ -43,9 +41,9 @@ function PrintElapsedTime() {
     if [ "$ELAPSED" -ge "$ELAPSED_LIMIT" ] || [ "$1" -ne "0" ]; then
         t=$(PrintTime $ELAPSED)
         if [ -n "$TIME_PARTIAL" ]; then
-            t="($(PrintTime $(expr $(TimeNow) - $TIME_PARTIAL))), Total: $t"
+            t="$(PrintTime $(expr $(TimeNow) - $TIME_PARTIAL)), Total: $t"
         fi
-        echo -e "\033[03;02;${c}m"$(PadMiddle "$x" "$t")"\033[00m"
+        echo -e "\033[03;02;${c}m"$(Pad "[$1] $t")"\033[00m"
     fi
 }
 
@@ -78,10 +76,10 @@ function PrintTime() {
     printf '\n'
 }
 
-function PadMiddle() {
-    local s=$(($COLUMNS - ${#1} - ${#2} - 2))
-    local b=$(printf '=%.0s' `seq 1 $s`)
-    echo $1 $b $2
+function Pad() {
+    local s=$((($COLUMNS - ${#1} - 1)/2))
+    local b=$(printf -- " -%.0s" `seq 1 $s`)
+    echo $1 $b
 }
 
 # Initialize.
