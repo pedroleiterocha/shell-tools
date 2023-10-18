@@ -48,7 +48,11 @@ function PrintElapsedTime() {
 }
 
 function TimeNow() {
-    date +%s%N
+    if [ -n "$TIME_TRAP_DATE" ]; then
+        $TIME_TRAP_DATE +%s%N
+    else
+        date +%s%N
+    fi
 }
 
 function PrintTime() {
